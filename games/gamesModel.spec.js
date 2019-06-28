@@ -1,33 +1,51 @@
-const db = require('../data/dbConfig.js');
+const db = require('../data/dbConfig');
 
-const request = require('supertest');
-const server = require('../api/server')
-const router = require('./gamesRouter');
+const { insert, get } = require('./gamesModel');
 
-const Games = require('./gamesModel.js');
+// describe('games model', () => {
+//     beforeEach(async () => {
+//         await db('games').truncate();
+//     })
 
-describe('games model', () => {
-    describe('insert()', () => {
-        beforeEach(async () => {
-            await db('games').truncate()
-        })
-        it('should insert the provided games into the db', async () => {
-            await Games.insert({ title: 'Battlefield', genre: 'First-person Shooter', releaseYear: 2002  })
-            await Games.insert({ title: 'Grand Theft Auto', genre: 'Action-adventure', releaseYear: 1997 })
-            await Games.insert({ title: 'Fortnite', genre: 'Survival, battle royale', releaseYear: 2017 })
-            await Games.insert({ title: 'Assassin\'s Creed', genre: 'Action-adventure Stealth', releaseYear: 2007 })
+//     it('should set environment to development', () => {
+//         expect(process.env.DB_ENV).toBe('development');
+//     });
 
-            const games = await db('games')
-            expect(games).toHaveLength(4)
-        })
-        it('should return 422', async () => {
-            await Games.insert({  title: 'Grand Theft Auto', genre: 'Action-adventure', releaseYear: 1997 })
+//     describe('get()', async () => {
+//         it('should return all games', async () => {
+//             await insert({ title: 'Street Fighter', genre: 'Action', releaseYear: '1997' })
+
+//             const games = await get();
+
+//             expect(games).toHaveLength(1)
+//         })
+
+//         it('should return empty array', async () => {
             
-            const game = await db('games')
-            expect (game).toHaveLength(1)
-            const res = await request(server.use(router)).post('/')
-            expect(res.status).toBe(422)
-        })
-    });
-});
+//             const games = await db('games');
 
+//             expect(games).toEqual([]);
+//         })
+//     })
+
+//     describe('insert()', () => {
+//         it('should insert the provided animal', async () => {
+            
+//             await insert({ title: 'Street Fighter', genre: 'Action', releaseYear: '1997' })
+        
+//             const games = await db('games');
+
+//             expect(games).toHaveLength(1);
+
+//         })
+
+//         it('should return empty array', async () => {
+            
+//             const games = await db('games');
+
+//             expect(games).toEqual([]);
+//         })
+//     })
+
+
+// });

@@ -1,50 +1,31 @@
-const db = require('../data/dbConfig.js');
+const knex = require("knex");
+
+const knexConfig = {
+    client: "sqlite3",
+    connection: {
+        filename: "./data/games.db3"
+    },
+    useNullAsDefault: true,
+    debug: true
+}
+
+const db = knex(knexConfig);
 
 module.exports = {
-    insert,
-    add,
-    update,
-    remove,
-    get,
-    getAll,
-    findById,
+  insert,
+  get,
 };
 
-async function insert(games) {
-    const [id] = await db('games').insert(games, 'id')
-
-    return db('games')
-    .where({id}, 'id', 'title', 'genre')
-    .first()
-}
-
-
-async function add(games) {
-    const [id] = await db('games').insert(games, 'id')
-
-    return db('games')
-    .where({id}, 'id', 'title')
-    .first()
-}
-
-async function update(id, changes) {
-    return null;
-}
-
-async function remove(id) {
-    return db('games')
-    .where( 'id', Number(id) )
-    .del()
-}
-
-function getAll() {
-    return db('games');
+function insert(game) {
+  return db('games')
+    .insert(game, 'id')
+    .then(ids => {
+      return db('games')
+        .where({ id : ids[0] })
+        .first();
+    });
 }
 
 function get() {
-    return db(['games'])
-}
-
-function findById(id) {
-    return null;
+  return db('games');
 }
